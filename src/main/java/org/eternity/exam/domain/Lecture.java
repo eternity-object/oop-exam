@@ -1,4 +1,4 @@
-package org.eternity.exam;
+package org.eternity.exam.domain;
 
 import java.time.LocalDate;
 

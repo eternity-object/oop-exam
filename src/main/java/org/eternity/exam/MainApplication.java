@@ -1,7 +1,9 @@
 package org.eternity.exam;
 
-import org.eternity.exam.LectureReporter.FormatType;
-import org.eternity.exam.LectureReporter.StorageType;
+import org.eternity.exam.domain.Lecture;
+import org.eternity.exam.service.LectureReporter;
+import org.eternity.exam.service.LectureReporter.FormatType;
+import org.eternity.exam.service.LectureReporter.StorageType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
