@@ -1,6 +1,5 @@
 package org.eternity.exam;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -17,7 +16,7 @@ public class MainApplication {
         LectureReporter reporter = new LectureReporter();
         reporter.report(
                 new DatabaseRecoder(
-                        new XmlConverter(new XmlMapper()),
+                        new JsonConverter(),
                         jdbcClient),
                 new Lecture("객체지향 설계", LocalDate.of(2025, 9, 22), 3));
     }

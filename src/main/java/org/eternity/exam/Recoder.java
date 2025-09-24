@@ -1,5 +1,7 @@
 package org.eternity.exam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public abstract class Recoder {
 
     private final Converter converter;
@@ -8,7 +10,7 @@ public abstract class Recoder {
         this.converter = converter;
     }
 
-    public void record(Lecture lecture) {
+    public void record(Lecture lecture) throws JsonProcessingException {
         String serialized = converter.convert(lecture);
 
         save(serialized);
