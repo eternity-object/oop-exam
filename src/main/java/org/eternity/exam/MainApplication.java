@@ -13,7 +13,11 @@ public class MainApplication {
         ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class);
         JdbcClient jdbcClient = context.getBean(JdbcClient.class);
 
-        LectureReporter reporter = new LectureReporter(new CsvFormatter(), new FileWriter());
+        Formatter formatter = FormatterFactory.createFormatter(FormatType.CSV);
+        Writer writer = WriterFactory.createWriter(StorageType.FILE, jdbcClient);
+
+        LectureReporter reporter = new LectureReporter(formatter, writer);
+
         reporter.report(
                 new Lecture("객체지향 설계", LocalDate.of(2025, 9, 22), 3));
     }

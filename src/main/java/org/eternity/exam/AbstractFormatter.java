@@ -6,4 +6,8 @@ public abstract class AbstractFormatter implements Formatter {
     protected AbstractFormatter(FormatType formatType) {
         this.formatType = formatType;
     }
+    public boolean supports(FormatType type) {
+        return this.formatType == type;
+    }
+
 }
