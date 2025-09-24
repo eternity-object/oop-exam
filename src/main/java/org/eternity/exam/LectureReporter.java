@@ -1,59 +1,55 @@
 package org.eternity.exam;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.jdbc.core.simple.JdbcClient;
+import org.eternity.exam.mapper.LectureMapper;
+import org.eternity.exam.storage.LectureStorage;
+import org.eternity.exam.type.FormatType;
+import org.eternity.exam.type.StorageType;
 
-import java.io.FileWriter;
+import java.util.List;
 
 public class LectureReporter {
-    public enum FormatType { JSON, CSV, XML }
-    public enum StorageType { DATABASE, FILE }
 
-    private final JdbcClient jdbcClient;
+    private final List<LectureMapper> mappers;
+    private final List<LectureStorage> storages;
 
-    public LectureReporter(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
+    public LectureReporter(List<LectureMapper> mappers, List<LectureStorage> storages) {
+        this.mappers = mappers;
+        this.storages = storages;
     }
 
     public void report(FormatType formatType, StorageType storageType, Lecture lecture) throws Exception {
-        String serialized = null;
+        LectureMapper mapper = getMapper(formatType);
+        if (mapper == null) {
+            throw new IllegalArgumentException("지원하지 않는 포맷 타입입니다: " + formatType);
+        }
 
-        // 포맷 변환
-        switch (formatType) {
-            case JSON -> {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.registerModule(new JavaTimeModule());
-                serialized = mapper.writeValueAsString(lecture);
-            }
-            case CSV -> {
-                CsvMapper mapper = new CsvMapper();
-                mapper.registerModule(new JavaTimeModule());
-                CsvSchema schema = mapper.schemaFor(Lecture.class).withHeader();
-                serialized = mapper.writer(schema).writeValueAsString(lecture);
-            }
-            case XML -> {
-                XmlMapper mapper = new XmlMapper();
-                mapper.registerModule(new JavaTimeModule());
-                serialized = mapper.writeValueAsString(lecture);
+        LectureStorage storage = getStorage(storageType);
+        if (storage == null) {
+            throw new IllegalArgumentException("지원하지 않는 저장소 타입입니다: " + storageType);
+        }
+
+        String serialized = mapper.writeValueAsString(lecture);
+        storage.store(serialized);
+
+    }
+
+    private LectureMapper getMapper(FormatType formatType) {
+        for (var mapper : mappers) {
+            if (mapper.isSatisfied(formatType)) {
+                return mapper;
             }
         }
 
-        //  저장
-        switch (storageType) {
-            case DATABASE -> {
-                jdbcClient.sql("INSERT INTO LECTURE(SERIALIZED_DATA) VALUES(?)")
-                        .param(1, serialized)
-                        .update();
-            }
-            case FILE -> {
-                try (FileWriter writer = new FileWriter("lecture_data.txt")) {
-                    writer.write(serialized);
-                }
+        return null;
+    }
+
+    private LectureStorage getStorage(StorageType storageType) {
+        for (var storage : storages) {
+            if (storage.isSatisfied(storageType)) {
+                return storage;
             }
         }
+
+        return null;
     }
 }
