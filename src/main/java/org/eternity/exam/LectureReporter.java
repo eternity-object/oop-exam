@@ -1,17 +1,15 @@
 package org.eternity.exam;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.eternity.exam.mapper.Mapper;
+import org.eternity.exam.mapper.MapperFactory;
+import org.eternity.exam.type.FormatType;
+import org.eternity.exam.type.StorageType;
+import org.eternity.exam.writer.WriterFactory;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Component;
 
-import java.io.FileWriter;
-
+@Component
 public class LectureReporter {
-    public enum FormatType { JSON, CSV, XML }
-    public enum StorageType { DATABASE, FILE }
 
     private final JdbcClient jdbcClient;
 
@@ -20,40 +18,12 @@ public class LectureReporter {
     }
 
     public void report(FormatType formatType, StorageType storageType, Lecture lecture) throws Exception {
-        String serialized = null;
-
         // 포맷 변환
-        switch (formatType) {
-            case JSON -> {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.registerModule(new JavaTimeModule());
-                serialized = mapper.writeValueAsString(lecture);
-            }
-            case CSV -> {
-                CsvMapper mapper = new CsvMapper();
-                mapper.registerModule(new JavaTimeModule());
-                CsvSchema schema = mapper.schemaFor(Lecture.class).withHeader();
-                serialized = mapper.writer(schema).writeValueAsString(lecture);
-            }
-            case XML -> {
-                XmlMapper mapper = new XmlMapper();
-                mapper.registerModule(new JavaTimeModule());
-                serialized = mapper.writeValueAsString(lecture);
-            }
-        }
+        Mapper mapper = MapperFactory.getMapper(formatType);
+        String serialized = mapper.serialize(lecture);
 
         //  저장
-        switch (storageType) {
-            case DATABASE -> {
-                jdbcClient.sql("INSERT INTO LECTURE(SERIALIZED_DATA) VALUES(?)")
-                        .param(1, serialized)
-                        .update();
-            }
-            case FILE -> {
-                try (FileWriter writer = new FileWriter("lecture_data.txt")) {
-                    writer.write(serialized);
-                }
-            }
-        }
+        WriterFactory writerFactory = new WriterFactory(jdbcClient);
+        writerFactory.getWriter(storageType).save(serialized);
     }
 }
