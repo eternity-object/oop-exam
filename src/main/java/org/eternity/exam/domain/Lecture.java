@@ -1,11 +1,11 @@
-package org.eternity.exam;
+package org.eternity.exam.domain;
 
 import java.time.LocalDate;
 
 public class Lecture {
-    private String title;
-    private LocalDate date;
-    private int days;
+    private final String title;
+    private final LocalDate date;
+    private final int days;
 
     public Lecture(String title, LocalDate date, int days) {
         this.title = title;
