@@ -5,17 +5,16 @@ import org.eternity.exam.LectureReporter.StorageType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.jdbc.core.simple.JdbcClient;
 
 import java.time.LocalDate;
 
 @SpringBootApplication
 public class MainApplication {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class);
-        JdbcClient jdbcClient = context.getBean(JdbcClient.class);
 
-        LectureReporter reporter = new LectureReporter(jdbcClient);
+        LectureReporter reporter = context.getBean(LectureReporter.class);
+
         reporter.report(
                 FormatType.JSON,
                 StorageType.FILE,
