@@ -13,11 +13,9 @@ public class MainApplication {
         ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class);
         JdbcClient jdbcClient = context.getBean(JdbcClient.class);
 
-        LectureReporter reporter = new LectureReporter();
+        LectureReporter reporter = new LectureReporter(
+                new DatabaseRecoder(new JsonConverter(), jdbcClient));
         reporter.report(
-                new DatabaseRecoder(
-                        new JsonConverter(),
-                        jdbcClient),
                 new Lecture("객체지향 설계", LocalDate.of(2025, 9, 22), 3));
     }
 }

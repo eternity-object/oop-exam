@@ -2,7 +2,13 @@ package org.eternity.exam;
 
 public class LectureReporter {
 
-    public void report(Recoder recoder, Lecture lecture) throws Exception {
+    private final Recoder recoder;
+
+    public LectureReporter(Recoder recoder) {
+        this.recoder = recoder;
+    }
+
+    public void report(Lecture lecture) throws Exception {
         recoder.record(lecture);
     }
 }
