@@ -1,8 +1,16 @@
 package org.eternity.exam;
 
 public class LectureReporter {
+    private final LectureFormatter lectureFormatter;
+    private final LectureStorage lectureStorage;
 
-    public void report(LectureFormatter lectureFormatter, LectureStorage lectureStorage, Lecture lecture) throws Exception {
+    public LectureReporter(LectureFormatter lectureFormatter, LectureStorage lectureStorage) {
+        this.lectureFormatter = lectureFormatter;
+        this.lectureStorage = lectureStorage;
+    }
+
+
+    public void report(Lecture lecture) throws Exception {
 
         // 포맷 변환
         String serialized = lectureFormatter.serialize(lecture);

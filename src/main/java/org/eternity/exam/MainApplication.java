@@ -27,36 +27,10 @@ public class MainApplication {
         LectureStorage databaseLectureStorage = new DatabaseLectureStorage(jdbcClient);
         LectureStorage fileLectureStorage = new FileLectureStorage();
 
-        LectureReporter reporter = new LectureReporter();
-        reporter.report(
-                jsonLectureFormatter,
-                databaseLectureStorage,
+        LectureReporter reporter1 = new LectureReporter(jsonLectureFormatter, databaseLectureStorage);
+        reporter1.report(
                 oop_design
         );
-        reporter.report(
-                jsonLectureFormatter,
-                fileLectureStorage,
-                oop_design
-        );
-        reporter.report(
-                xmlLectureFormatter,
-                databaseLectureStorage,
-                oop_design
-        );
-        reporter.report(
-                xmlLectureFormatter,
-                fileLectureStorage,
-                oop_design
-        );
-        reporter.report(
-                csvLectureFormatter,
-                databaseLectureStorage,
-                oop_design
-        );
-        reporter.report(
-                csvLectureFormatter,
-                fileLectureStorage,
-                oop_design
-        );
+
     }
 }
