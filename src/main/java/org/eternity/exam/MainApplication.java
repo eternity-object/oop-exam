@@ -32,5 +32,30 @@ public class MainApplication {
                 oop_design
         );
 
+        LectureReporter reporter2 = new LectureReporter(xmlLectureFormatter, databaseLectureStorage);
+        reporter2.report(
+                oop_design
+        );
+
+        LectureReporter reporter3 = new LectureReporter(csvLectureFormatter, databaseLectureStorage);
+        reporter3.report(
+                oop_design
+        );
+
+        LectureReporter reporter4 = new LectureReporter(jsonLectureFormatter, fileLectureStorage);
+        reporter4.report(
+                oop_design
+        );
+
+        LectureReporter reporter5 = new LectureReporter(xmlLectureFormatter, fileLectureStorage);
+        reporter5.report(
+                oop_design
+        );
+
+        LectureReporter reporter6 = new LectureReporter(csvLectureFormatter, fileLectureStorage);
+        reporter6.report(
+                oop_design
+        );
+
     }
 }
