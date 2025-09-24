@@ -1,16 +1,20 @@
 package org.eternity.exam;
 
+import java.util.List;
+import org.springframework.stereotype.Component;
+
+@Component
 public class FormatterFactory {
-    public static Formatter createFormatter(FormatType formatType) {
-        switch (formatType) {
-            case JSON:
-                return new JsonFormatter();
-            case CSV:
-                return new CsvFormatter();
-            case XML:
-                return new XmlFormatter();
-            default:
-                throw new IllegalArgumentException();
-        }
+    private final List<Formatter> formatters;
+
+    public FormatterFactory(List<Formatter> formatters) {
+        this.formatters = formatters;
+    }
+
+    public Formatter createFormatter(FormatType formatType) {
+        return formatters.stream()
+            .filter(formatter -> formatter.supports(formatType))
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
     }
 }

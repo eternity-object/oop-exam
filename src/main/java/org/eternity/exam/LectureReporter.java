@@ -1,15 +1,22 @@
 package org.eternity.exam;
 
-public class LectureReporter {
-    private final Formatter formatter;
-    private final Writer writer;
+import org.springframework.stereotype.Component;
 
-    public LectureReporter(Formatter formatter, Writer writer) {
-        this.formatter = formatter;
-        this.writer = writer;
+@Component
+public class LectureReporter {
+    private final FormatterFactory formatterFactory;
+    private final WriterFactory writerFactory;
+
+    public LectureReporter(FormatterFactory formatterFactory, WriterFactory writerFactory) {
+        this.formatterFactory = formatterFactory;
+        this.writerFactory = writerFactory;
     }
 
-    public void report(Lecture lecture) throws Exception {
+
+    public void report(Lecture lecture, FormatType formatType, StorageType storageType)
+        throws Exception {
+        Formatter formatter = formatterFactory.createFormatter(formatType);
+        Writer writer = writerFactory.createWriter(storageType);
         writer.write(formatter.formatToString(lecture));
     }
 }

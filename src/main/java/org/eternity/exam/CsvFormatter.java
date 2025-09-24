@@ -3,10 +3,12 @@ package org.eternity.exam;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CsvFormatter extends AbstractFormatter {
 
-    protected CsvFormatter() {
+    public CsvFormatter() {
         super(FormatType.CSV);
     }
 

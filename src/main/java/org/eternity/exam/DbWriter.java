@@ -1,12 +1,14 @@
 package org.eternity.exam;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DbWriter implements Writer{
 
     private final JdbcClient jdbcClient;
 
-    public DbWriter(JdbcClient jdbcClient) {
+    protected DbWriter(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
@@ -16,4 +18,10 @@ public class DbWriter implements Writer{
             .param(1, serialized)
             .update();
     }
+
+    @Override
+    public boolean supports(StorageType storageType) {
+        return StorageType.DATABASE.equals(storageType);
+    }
 }
+

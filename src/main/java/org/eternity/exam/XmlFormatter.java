@@ -2,7 +2,9 @@ package org.eternity.exam;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.stereotype.Component;
 
+@Component
 public class XmlFormatter extends AbstractFormatter {
 
     protected XmlFormatter() {

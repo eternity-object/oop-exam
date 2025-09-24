@@ -1,16 +1,21 @@
 package org.eternity.exam;
 
+import java.util.List;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WriterFactory {
-    public static Writer createWriter(StorageType storageType, JdbcClient jdbcClient) {
-        switch (storageType) {
-            case DATABASE:
-                return new DbWriter(jdbcClient);
-            case FILE:
-                return new FileWriter();
-            default:
-                throw new IllegalArgumentException();
-        }
+    private final List<Writer> writers;
+
+    public WriterFactory(List<Writer> writers) {
+        this.writers = writers;
+    }
+
+    public Writer createWriter(StorageType storageType) {
+        return writers.stream()
+            .filter(writer -> writer.supports(storageType))
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
     }
 }
