@@ -3,13 +3,13 @@ package org.eternity.exam.formatters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.eternity.exam.Formatter;
+import org.eternity.exam.LectureFormatter;
 import org.eternity.exam.Lecture;
 
-public class JsonFormatter implements Formatter {
+public class JsonLectureFormatter implements LectureFormatter {
     private final ObjectMapper mapper;
 
-    public JsonFormatter() {
+    public JsonLectureFormatter() {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
     }

@@ -1,10 +1,10 @@
 package org.eternity.exam;
 
-import org.eternity.exam.formatters.CsvFormatter;
-import org.eternity.exam.formatters.JsonFormatter;
-import org.eternity.exam.formatters.XmlFormatter;
-import org.eternity.exam.storages.DatabaseStorage;
-import org.eternity.exam.storages.FileStorage;
+import org.eternity.exam.formatters.CsvLectureFormatter;
+import org.eternity.exam.formatters.JsonLectureFormatter;
+import org.eternity.exam.formatters.XmlLectureFormatter;
+import org.eternity.exam.storages.DatabaseLectureStorage;
+import org.eternity.exam.storages.FileLectureStorage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -20,42 +20,42 @@ public class MainApplication {
 
         Lecture oop_design = new Lecture("객체지향 설계", LocalDate.of(2025, 9, 22), 3);
 
-        Formatter jsonFormatter = new JsonFormatter();
-        Formatter xmlFormatter = new XmlFormatter();
-        Formatter csvFormatter = new CsvFormatter();
+        LectureFormatter jsonLectureFormatter = new JsonLectureFormatter();
+        LectureFormatter xmlLectureFormatter = new XmlLectureFormatter();
+        LectureFormatter csvLectureFormatter = new CsvLectureFormatter();
 
-        Storage databaseStorage = new DatabaseStorage(jdbcClient);
-        Storage fileStorage = new FileStorage();
+        LectureStorage databaseLectureStorage = new DatabaseLectureStorage(jdbcClient);
+        LectureStorage fileLectureStorage = new FileLectureStorage();
 
         LectureReporter reporter = new LectureReporter();
         reporter.report(
-                jsonFormatter,
-                databaseStorage,
+                jsonLectureFormatter,
+                databaseLectureStorage,
                 oop_design
         );
         reporter.report(
-                jsonFormatter,
-                fileStorage,
+                jsonLectureFormatter,
+                fileLectureStorage,
                 oop_design
         );
         reporter.report(
-                xmlFormatter,
-                databaseStorage,
+                xmlLectureFormatter,
+                databaseLectureStorage,
                 oop_design
         );
         reporter.report(
-                xmlFormatter,
-                fileStorage,
+                xmlLectureFormatter,
+                fileLectureStorage,
                 oop_design
         );
         reporter.report(
-                csvFormatter,
-                databaseStorage,
+                csvLectureFormatter,
+                databaseLectureStorage,
                 oop_design
         );
         reporter.report(
-                csvFormatter,
-                fileStorage,
+                csvLectureFormatter,
+                fileLectureStorage,
                 oop_design
         );
     }

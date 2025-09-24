@@ -2,6 +2,6 @@ package org.eternity.exam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public interface Formatter {
+public interface LectureFormatter {
     String serialize(Lecture lecture) throws JsonProcessingException;
 }

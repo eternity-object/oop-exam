@@ -1,14 +1,14 @@
 package org.eternity.exam.storages;
 
-import org.eternity.exam.Storage;
+import org.eternity.exam.LectureStorage;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 import java.io.IOException;
 
-public class DatabaseStorage implements Storage {
+public class DatabaseLectureStorage implements LectureStorage {
     private JdbcClient jdbcClient;
 
-    public DatabaseStorage(JdbcClient jdbcClient) {
+    public DatabaseLectureStorage(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 

@@ -1,17 +1,13 @@
 package org.eternity.exam;
 
-import org.springframework.jdbc.core.simple.JdbcClient;
-
-import java.io.FileWriter;
-
 public class LectureReporter {
 
-    public void report(Formatter formatter, Storage storage, Lecture lecture) throws Exception {
+    public void report(LectureFormatter lectureFormatter, LectureStorage lectureStorage, Lecture lecture) throws Exception {
 
         // 포맷 변환
-        String serialized = formatter.serialize(lecture);
+        String serialized = lectureFormatter.serialize(lecture);
 
         //  저장
-        storage.write(serialized);
+        lectureStorage.write(serialized);
     }
 }
