@@ -2,6 +2,8 @@ package org.eternity.exam;
 
 import org.eternity.exam.LectureReporter.FormatType;
 import org.eternity.exam.LectureReporter.StorageType;
+import org.eternity.exam.formatter.FormatterFactory;
+import org.eternity.exam.writer.WriterFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,7 +17,10 @@ public class MainApplication {
         ConfigurableApplicationContext context = SpringApplication.run(MainApplication.class);
         JdbcClient jdbcClient = context.getBean(JdbcClient.class);
 
-        LectureReporter reporter = new LectureReporter(jdbcClient);
+        FormatterFactory formatterFactory = new FormatterFactory();
+        WriterFactory writerFactory = new WriterFactory(jdbcClient);
+
+        LectureReporter reporter = new LectureReporter(writerFactory, formatterFactory);
         reporter.report(
                 FormatType.JSON,
                 StorageType.FILE,
