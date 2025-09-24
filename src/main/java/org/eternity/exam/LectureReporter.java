@@ -10,37 +10,18 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import java.io.FileWriter;
 
 public class LectureReporter {
-    public enum FormatType { JSON, CSV, XML }
     public enum StorageType { DATABASE, FILE }
 
     private final JdbcClient jdbcClient;
+    private final Formatter formatter;
 
-    public LectureReporter(JdbcClient jdbcClient) {
+    public LectureReporter(JdbcClient jdbcClient, Formatter formatter) {
         this.jdbcClient = jdbcClient;
+        this.formatter = formatter;
     }
 
-    public void report(FormatType formatType, StorageType storageType, Lecture lecture) throws Exception {
-        String serialized = null;
-
-        // 포맷 변환
-        switch (formatType) {
-            case JSON -> {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.registerModule(new JavaTimeModule());
-                serialized = mapper.writeValueAsString(lecture);
-            }
-            case CSV -> {
-                CsvMapper mapper = new CsvMapper();
-                mapper.registerModule(new JavaTimeModule());
-                CsvSchema schema = mapper.schemaFor(Lecture.class).withHeader();
-                serialized = mapper.writer(schema).writeValueAsString(lecture);
-            }
-            case XML -> {
-                XmlMapper mapper = new XmlMapper();
-                mapper.registerModule(new JavaTimeModule());
-                serialized = mapper.writeValueAsString(lecture);
-            }
-        }
+    public void report(StorageType storageType, Lecture lecture) throws Exception {
+        String serialized = formatter.formatToString(lecture);
 
         //  저장
         switch (storageType) {
