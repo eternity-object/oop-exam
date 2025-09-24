@@ -8,12 +8,16 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.eternity.exam.Lecture;
 
 public class CsvFormatter implements LectureFormatter{
+    private final CsvMapper mapper;
+
+    public CsvFormatter(){
+        mapper = new CsvMapper();
+        mapper.registerModule(new JavaTimeModule());
+    }
+
     @Override
     public String serialize(Lecture lecture) throws JsonProcessingException {
-        CsvMapper mapper = new CsvMapper();
-        mapper.registerModule(new JavaTimeModule());
         CsvSchema schema = mapper.schemaFor(Lecture.class).withHeader();
-        String serialized = mapper.writer(schema).writeValueAsString(lecture);
-        return serialized;
+        return mapper.writer(schema).writeValueAsString(lecture);
     }
 }

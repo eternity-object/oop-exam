@@ -6,11 +6,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.eternity.exam.Lecture;
 
 public class JsonFormatter implements LectureFormatter{
+    private final ObjectMapper mapper;
+
+    public JsonFormatter() {
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+    }
+
     @Override
     public String serialize(Lecture lecture) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        String serialized = mapper.writeValueAsString(lecture);
-        return serialized;
+        return mapper.writeValueAsString(lecture);
     }
 }
