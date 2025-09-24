@@ -1,0 +1,1 @@
+<lecture><title>Spring SOLID 강의</title><date>2024-06-01</date><duration>5</duration></lecture>
