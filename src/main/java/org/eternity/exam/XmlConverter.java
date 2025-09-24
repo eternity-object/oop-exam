@@ -1,18 +1,16 @@
 package org.eternity.exam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class XmlConverter implements Converter {
+public class XmlConverter extends Converter {
 
-    public String convert(Lecture lecture) throws JsonProcessingException {
-        String serialized;
-        XmlMapper mapper = new XmlMapper();
-        mapper.registerModule(new JavaTimeModule());
+    public XmlConverter(ObjectMapper mapper) {
+        super(mapper);
+    }
 
-        serialized = mapper.writeValueAsString(lecture);
-
-        return serialized;
+    @Override
+    protected String serialize(Lecture lecture) throws JsonProcessingException {
+        return mapper.writeValueAsString(lecture);
     }
 }

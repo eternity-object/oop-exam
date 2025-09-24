@@ -1,20 +1,21 @@
 package org.eternity.exam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class CsvConverter implements Converter {
+public class CsvConverter extends Converter {
 
-    public String convert(Lecture lecture) throws JsonProcessingException {
-        String serialized;
-        CsvMapper mapper = new CsvMapper();
-        mapper.registerModule(new JavaTimeModule());
+    protected CsvConverter(ObjectMapper mapper) {
+        super(mapper);
+    }
 
-        CsvSchema schema = mapper.schemaFor(Lecture.class).withHeader();
-        serialized = mapper.writer(schema).writeValueAsString(lecture);
+    @Override
+    public String serialize(Lecture lecture) throws JsonProcessingException {
+        CsvMapper csvMapper = (CsvMapper) mapper;
+        CsvSchema schema = csvMapper.schemaFor(Lecture.class).withHeader();
 
-        return serialized;
+        return csvMapper.writer(schema).writeValueAsString(lecture);
     }
 }
